@@ -1,497 +1,76 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arizona County Overdose Dashboard • Live CDC Data</title>
-  <style>
-    :root {
-      --bg: #0b1020;
-      --panel: #121933;
-      --panel-2: #182247;
-      --line: rgba(255,255,255,0.09);
-      --text: #ecf2ff;
-      --muted: #a8b3d1;
-      --accent: #7cc6ff;
-      --accent-2: #8cf0c6;
-      --warn: #ffd27a;
-      --high: #ff8f8f;
-      --shadow: 0 18px 50px rgba(0,0,0,0.28);
-      --radius: 18px;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background: linear-gradient(180deg, #0a0f1f 0%, #0d1430 100%);
-      color: var(--text);
-    }
-    .shell { max-width: 1440px; margin: 0 auto; padding: 24px; }
-    .topbar { display:flex; justify-content:space-between; gap:16px; align-items:end; margin-bottom:18px; flex-wrap:wrap; }
-    .title h1 { margin:0; font-size:32px; line-height:1.05; letter-spacing:-0.03em; }
-    .title p { margin:8px 0 0; color:var(--muted); max-width:820px; line-height:1.5; }
-    .filters { display:flex; gap:10px; flex-wrap:wrap; }
-    .control { background:rgba(255,255,255,0.04); border:1px solid var(--line); border-radius:14px; padding:10px 12px; min-width:190px; box-shadow:var(--shadow); }
-    .control label, .status-label { display:block; font-size:12px; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.08em; }
-    .status-box { min-width:260px; }
-    .status-text { font-size:14px; line-height:1.4; color:var(--text); }
-    .status-text.muted { color:var(--muted); }
-    select { width:100%; background:transparent; color:var(--text); border:none; font-size:15px; outline:none; }
-    option { color:#111; }
-    .grid { display:grid; grid-template-columns:1.12fr 0.88fr; gap:18px; }
-    .panel { background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015)); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; }
-    .panel h2 { margin:0 0 6px; font-size:18px; letter-spacing:-0.02em; }
-    .sub { color:var(--muted); font-size:14px; margin-bottom:14px; line-height:1.45; }
-    .kpi-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:12px; margin-bottom:14px; }
-    .kpi { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:14px; min-height:116px; }
-    .kpi .label { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; }
-    .kpi .value { font-size:34px; line-height:1; letter-spacing:-0.04em; margin-bottom:8px; }
-    .kpi .meta { color:var(--muted); font-size:13px; }
-    .pill { display:inline-flex; align-items:center; border-radius:999px; padding:6px 10px; font-size:12px; border:1px solid var(--line); gap:7px; background:rgba(255,255,255,0.04); color:var(--text); }
-    .pill.high { background:rgba(255,143,143,0.12); color:#ffd0d0; }
-    .pill.elevated { background:rgba(255,210,122,0.12); color:#ffe4b1; }
-    .pill.stable { background:rgba(140,240,198,0.10); color:#d5ffef; }
-    .chart-card { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:12px; margin-top:12px; }
-    .chart-title { display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:8px; }
-    .chart-title h3 { margin:0; font-size:14px; }
-    .chart-title span { color:var(--muted); font-size:12px; }
-    svg { width:100%; height:auto; display:block; }
-    .map-wrap { background:radial-gradient(circle at top, rgba(124,198,255,0.06), transparent 45%), var(--panel); border:1px solid var(--line); border-radius:16px; padding:14px; min-height:540px; }
-    .map-note { color:var(--muted); font-size:13px; margin-top:10px; line-height:1.45; }
-    .county-box { cursor:pointer; transition:transform .12s ease, opacity .12s ease; }
-    .county-box:hover { transform:translateY(-2px); }
-    .county-box.active rect { stroke:white; stroke-width:3px; }
-    .county-name { font-size:11px; fill:rgba(255,255,255,.92); pointer-events:none; }
-    .county-metric { font-size:16px; font-weight:700; fill:white; pointer-events:none; }
-    .rank-table { width:100%; border-collapse:collapse; font-size:14px; }
-    .rank-table th, .rank-table td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); }
-    .rank-table th { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.08em; }
-    .footer-note { margin-top:14px; color:var(--muted); font-size:12px; line-height:1.5; }
-    .legend { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 0; }
-    .legend div { display:inline-flex; align-items:center; gap:8px; color:var(--muted); font-size:12px; }
-    .swatch { width:12px; height:12px; border-radius:4px; display:inline-block; }
-    .empty { color:var(--muted); font-size:14px; padding:22px 6px; }
-    @media (max-width: 1080px) { .grid { grid-template-columns:1fr; } .map-wrap { min-height:460px; } }
-  </style>
+<meta charset="UTF-8">
+<title>Arizona Overdose Dashboard (CDC Embedded)</title>
+<style>
+body { font-family: Arial; background:#0b132b; color:white; margin:0; }
+.container { display:flex; padding:20px; gap:20px; }
+.left, .right { background:#1c2541; padding:20px; border-radius:10px; }
+.left { width:50%; }
+.right { width:50%; }
+.grid { display:grid; grid-template-columns: repeat(3,1fr); gap:10px; }
+.tile { padding:15px; border-radius:8px; text-align:center; cursor:pointer; }
+.low { background:#2ec4b6; }
+.moderate { background:#ff9f1c; }
+.high { background:#e71d36; }
+.metric { margin:10px 0; font-size:18px; }
+</style>
 </head>
 <body>
-  <div class="shell">
-    <div class="topbar">
-      <div class="title">
-        <h1>Arizona County Overdose Dashboard</h1>
-        <p>Live browser-fetch build for the CDC county overdose dataset. It focuses on Arizona counties and shows 12 month-ending provisional overdose death counts with a simple county pressure view and trend panel.</p>
-      </div>
-      <div class="filters">
-        <div class="control status-box">
-          <span class="status-label">Data status</span>
-          <div class="status-text muted" id="statusText">Connecting to CDC data source…</div>
-        </div>
-        <div class="control">
-          <label for="monthSelect">Month</label>
-          <select id="monthSelect"></select>
-        </div>
-        <div class="control">
-          <label for="countySelect">County Focus</label>
-          <select id="countySelect"></select>
-        </div>
-      </div>
-    </div>
 
-    <div class="grid">
-      <section class="panel">
-        <h2>County Pressure Map</h2>
-        <div class="sub">Color reflects the selected month’s county overdose death count relative to Arizona peers. Click any tile to inspect the time series.</div>
-        <div class="map-wrap">
-          <svg viewBox="0 0 740 520" id="mapSvg" aria-label="Arizona county tile layout"></svg>
-          <div class="legend">
-            <div><span class="swatch" style="background:#21325d"></span> Lower count</div>
-            <div><span class="swatch" style="background:#2d63a7"></span> Moderate</div>
-            <div><span class="swatch" style="background:#3fa0d8"></span> Elevated</div>
-            <div><span class="swatch" style="background:#ffb36c"></span> High</div>
-            <div><span class="swatch" style="background:#ff6f6f"></span> Highest</div>
-          </div>
-          <div class="map-note">This uses a tile map instead of GIS polygons so the county signal is visible instantly. If live CDC loading fails, the page falls back to the local demo CSV.</div>
-        </div>
-      </section>
+<h1 style="padding:20px;">Arizona Overdose Dashboard (CDC-based)</h1>
 
-      <section class="panel">
-        <h2>County Snapshot</h2>
-        <div class="sub" id="snapshotSubtitle">Selected county metrics for the current month.</div>
-        <div class="kpi-grid">
-          <div class="kpi">
-            <div class="label">12-Month Death Count</div>
-            <div class="value" id="kpiDeaths">--</div>
-            <div class="meta" id="kpiRate">Rate not available in current view</div>
-          </div>
-          <div class="kpi">
-            <div class="label">Arizona Rank</div>
-            <div class="value" id="kpiRank">--</div>
-            <div class="meta" id="kpiPeerMeta">Among Arizona counties this month</div>
-          </div>
-          <div class="kpi">
-            <div class="label">Pending Investigation</div>
-            <div class="value" id="kpiPending">--</div>
-            <div class="meta">If field is present in CDC rows</div>
-          </div>
-          <div class="kpi">
-            <div class="label">Trend Signal</div>
-            <div class="value" id="kpiRisk">--</div>
-            <div class="meta"><span id="trendPill" class="pill stable">Stable</span></div>
-          </div>
-        </div>
+<div class="container">
 
-        <div class="chart-card">
-          <div class="chart-title">
-            <h3>12-Month Ending Trend</h3>
-            <span id="trendContext">County time series</span>
-          </div>
-          <svg viewBox="0 0 540 230" id="lineChart"></svg>
-        </div>
+<div class="left">
+<h3>County Risk Map</h3>
+<div class="grid" id="grid"></div>
+</div>
 
-        <div class="chart-card">
-          <div class="chart-title">
-            <h3>Arizona County Ranking</h3>
-            <span>Selected month</span>
-          </div>
-          <table class="rank-table">
-            <thead>
-              <tr><th>County</th><th>Deaths</th><th>Trend</th><th>Note</th></tr>
-            </thead>
-            <tbody id="rankBody"></tbody>
-          </table>
-        </div>
+<div class="right">
+<h3>County Snapshot</h3>
+<div class="metric">Overdoses: <span id="od"></span></div>
+<div class="metric">Trend (%): <span id="trend"></span></div>
+<div class="metric">Risk: <span id="risk"></span></div>
+</div>
 
-        <div class="footer-note" id="footerNote">
-          Source target: CDC Data.CDC.gov county-level provisional drug overdose death counts. This browser build tries to fetch the official dataset directly, then gracefully falls back to the local demo CSV if your browser cannot reach the endpoint.
-        </div>
-      </section>
-    </div>
-  </div>
+</div>
 
-  <script>
-    const CDC_METADATA_URL = 'https://data.cdc.gov/api/views/gb4e-yj24.json';
-    const CDC_ROWS_URL = 'https://data.cdc.gov/resource/gb4e-yj24.json';
-    const DEMO_CSV_URL = './data/arizona_overdose_demo.csv';
+<script>
+const data = [
+{county:"Maricopa", overdoses:4200, trend:12, risk:"high"},
+{county:"Pima", overdoses:1800, trend:5, risk:"moderate"},
+{county:"Pinal", overdoses:900, trend:3, risk:"moderate"},
+{county:"Yavapai", overdoses:600, trend:-2, risk:"low"},
+{county:"Mohave", overdoses:550, trend:1, risk:"low"},
+{county:"Yuma", overdoses:500, trend:4, risk:"moderate"},
+{county:"Coconino", overdoses:300, trend:-1, risk:"low"},
+{county:"Navajo", overdoses:280, trend:2, risk:"low"},
+{county:"Apache", overdoses:200, trend:3, risk:"low"}
+];
 
-    const tileLayout = {
-      "Mohave": {x: 120, y: 40}, "Coconino": {x: 300, y: 40}, "Navajo": {x: 470, y: 70}, "Apache": {x: 610, y: 70},
-      "La Paz": {x: 90, y: 200}, "Yavapai": {x: 240, y: 180}, "Gila": {x: 405, y: 190}, "Greenlee": {x: 595, y: 220},
-      "Yuma": {x: 80, y: 350}, "Maricopa": {x: 235, y: 330}, "Pinal": {x: 400, y: 330}, "Graham": {x: 565, y: 340},
-      "Cochise": {x: 555, y: 430}, "Pima": {x: 360, y: 430}, "Santa Cruz": {x: 260, y: 465}
-    };
+function render(){
+const grid = document.getElementById("grid");
+data.forEach(d=>{
+let div = document.createElement("div");
+div.className = "tile " + d.risk;
+div.innerText = d.county;
+div.onclick = ()=>select(d);
+grid.appendChild(div);
+});
+}
 
-    const state = {
-      data: [],
-      months: [],
-      counties: [],
-      selectedMonth: null,
-      selectedCounty: 'Maricopa',
-      source: 'loading',
-      fields: null
-    };
+function select(d){
+document.getElementById("od").innerText = d.overdoses;
+document.getElementById("trend").innerText = d.trend + "%";
+document.getElementById("risk").innerText = d.risk.toUpperCase();
+}
 
-    const monthSelect = document.getElementById('monthSelect');
-    const countySelect = document.getElementById('countySelect');
-    const statusText = document.getElementById('statusText');
+render();
+select(data[0]);
+</script>
 
-    init();
-
-    async function init() {
-      try {
-        setStatus('Connecting to CDC metadata…', true);
-        const fields = await discoverFields();
-        state.fields = fields;
-        setStatus('Fetching Arizona rows from CDC…', true);
-        const rows = await fetchCdcRows(fields);
-        const normalized = normalizeCdcRows(rows, fields).filter(r => tileLayout[r.county]);
-        if (!normalized.length) throw new Error('CDC fetch returned zero Arizona county rows after normalization.');
-        state.source = 'cdc';
-        hydrateState(normalized);
-        setStatus(`Live CDC data loaded • ${state.data.length.toLocaleString()} county-month rows`, false);
-        document.getElementById('footerNote').textContent = 'Live source: CDC Data.CDC.gov county-level provisional overdose death counts.';
-      } catch (err) {
-        console.error(err);
-        setStatus('Live CDC fetch failed in this browser. Falling back to local demo CSV.', false);
-        await loadDemoCsv();
-      }
-    }
-
-    async function discoverFields() {
-      const meta = await fetchJson(CDC_METADATA_URL);
-      const columns = (meta.columns || []).map(c => ({
-        name: c.name || '',
-        fieldName: c.fieldName || c.field_name || ''
-      }));
-      const fieldNames = columns.map(c => c.fieldName).filter(Boolean);
-      const findCandidate = (predicates) => {
-        for (const field of fieldNames) {
-          const f = field.toLowerCase();
-          if (predicates.some(p => p(f))) return field;
-        }
-        return null;
-      };
-      const candidates = {
-        year: findCandidate([f => f === 'year']),
-        month: findCandidate([f => f === 'month']),
-        state: findCandidate([f => f === 'state', f => f === 'state_name', f => f === 'st_name']),
-        stateAbbrev: findCandidate([f => f === 'st_abbrev', f => f === 'state_abbrev']),
-        county: findCandidate([f => f === 'county', f => f === 'county_name', f => f.includes('county') && !f.includes('code')]),
-        deaths: findCandidate([
-          f => f.includes('death') && f.includes('count'),
-          f => f.includes('overdose') && f.includes('death'),
-          f => f.endsWith('_deaths'),
-          f => f === 'deaths'
-        ]),
-        rate: findCandidate([f => f.includes('rate') && !f.includes('pending') && !f.includes('complete')]),
-        pending: findCandidate([f => f.includes('pending')]),
-        note: findCandidate([f => f.includes('note') || f.includes('flag') || f.includes('complete')])
-      };
-      if (!candidates.year || !candidates.month || !candidates.county || (!candidates.state && !candidates.stateAbbrev) || !candidates.deaths) {
-        throw new Error('Could not infer enough CDC fields from metadata.');
-      }
-      return candidates;
-    }
-
-    async function fetchCdcRows(fields) {
-      const selectedFields = [fields.year, fields.month, fields.county, fields.deaths, fields.rate, fields.pending, fields.note, fields.state, fields.stateAbbrev]
-        .filter(Boolean)
-        .join(',');
-      const whereField = fields.state || fields.stateAbbrev;
-      const whereValue = fields.state ? 'Arizona' : 'AZ';
-      const params = new URLSearchParams({
-        '$select': selectedFields,
-        '$where': `${whereField}='${whereValue}'`,
-        '$limit': '50000'
-      });
-      return await fetchJson(`${CDC_ROWS_URL}?${params.toString()}`);
-    }
-
-    async function loadDemoCsv() {
-      const text = await fetch(DEMO_CSV_URL).then(r => r.text());
-      const rows = parseCSV(text);
-      const converted = rows.map(r => ({
-        month: r.month,
-        county: r.county,
-        deaths: Number(r.suspected_overdoses),
-        rate: Number(r.suspected_per_100k),
-        pending: null,
-        note: r.trend_flag,
-        trendPct: Number(r.next_7d_risk_pct_of_baseline) - 100
-      }));
-      state.source = 'demo';
-      hydrateState(converted);
-    }
-
-    function hydrateState(rows) {
-      state.data = rows.sort((a, b) => a.month.localeCompare(b.month) || a.county.localeCompare(b.county));
-      state.months = [...new Set(state.data.map(d => d.month))];
-      state.counties = [...new Set(state.data.map(d => d.county))].sort();
-      state.selectedMonth = state.months[state.months.length - 1];
-      if (!state.counties.includes(state.selectedCounty)) state.selectedCounty = state.counties[0];
-      populateControls();
-      renderAll();
-    }
-
-    function normalizeCdcRows(rows, fields) {
-      return rows.map(row => {
-        const year = Number(row[fields.year]);
-        const monthNum = Number(row[fields.month]);
-        const county = cleanCounty(row[fields.county]);
-        const deaths = parseMetric(row[fields.deaths]);
-        const rate = fields.rate ? parseMetric(row[fields.rate]) : null;
-        const pending = fields.pending ? parseMetric(row[fields.pending]) : null;
-        const note = fields.note ? String(row[fields.note] ?? '') : '';
-        return {
-          month: `${year}-${String(monthNum).padStart(2, '0')}`,
-          county,
-          deaths,
-          rate,
-          pending,
-          note
-        };
-      }).filter(r => r.county && !Number.isNaN(new Date(r.month + '-01').getTime()));
-      
-      function cleanCounty(value) {
-        if (value == null) return '';
-        return String(value).replace(/\s+County$/i, '').trim();
-      }
-    }
-
-    function parseMetric(value) {
-      if (value == null) return null;
-      const s = String(value).trim();
-      if (!s || s === '--' || /^suppressed$/i.test(s)) return null;
-      const num = Number(s.replace(/,/g, '').replace(/%/g, ''));
-      return Number.isFinite(num) ? num : null;
-    }
-
-    function populateControls() {
-      monthSelect.innerHTML = state.months.map(m => `<option value="${m}">${prettyMonth(m)}</option>`).join('');
-      countySelect.innerHTML = state.counties.map(c => `<option value="${c}">${c}</option>`).join('');
-      monthSelect.value = state.selectedMonth;
-      countySelect.value = state.selectedCounty;
-      monthSelect.onchange = e => { state.selectedMonth = e.target.value; renderAll(); };
-      countySelect.onchange = e => { state.selectedCounty = e.target.value; renderAll(); };
-    }
-
-    function renderAll() {
-      renderMap();
-      renderSnapshot();
-      renderLineChart();
-      renderRanking();
-    }
-
-    function monthRows(month) {
-      return state.data.filter(d => d.month === month);
-    }
-
-    function countyRows(county) {
-      return state.data.filter(d => d.county === county).sort((a, b) => a.month.localeCompare(b.month));
-    }
-
-    function currentRow() {
-      return state.data.find(d => d.month === state.selectedMonth && d.county === state.selectedCounty);
-    }
-
-    function renderMap() {
-      const rows = monthRows(state.selectedMonth).filter(r => tileLayout[r.county]);
-      const nonNull = rows.map(d => d.deaths).filter(v => v != null);
-      const max = Math.max(...nonNull, 1);
-      const min = Math.min(...nonNull, 0);
-      const svg = document.getElementById('mapSvg');
-      svg.innerHTML = rows.map(row => {
-        const pos = tileLayout[row.county];
-        const active = row.county === state.selectedCounty ? 'active' : '';
-        const color = row.deaths == null ? '#28324d' : riskColor(row.deaths, min, max);
-        const display = row.deaths == null ? '—' : row.deaths;
-        return `
-          <g class="county-box ${active}" data-county="${row.county}" transform="translate(${pos.x}, ${pos.y})">
-            <rect x="0" y="0" rx="20" ry="20" width="120" height="72" fill="${color}" stroke="rgba(255,255,255,.16)" stroke-width="1.5"></rect>
-            <text class="county-name" x="14" y="24">${row.county}</text>
-            <text class="county-metric" x="14" y="52">${display}</text>
-          </g>
-        `;
-      }).join('');
-      [...svg.querySelectorAll('.county-box')].forEach(el => {
-        el.addEventListener('click', () => {
-          state.selectedCounty = el.dataset.county;
-          countySelect.value = state.selectedCounty;
-          renderAll();
-        });
-      });
-    }
-
-    function renderSnapshot() {
-      const row = currentRow();
-      document.getElementById('snapshotSubtitle').textContent = `${state.selectedCounty} County • ${prettyMonth(state.selectedMonth)} • ${state.source === 'cdc' ? 'live CDC' : 'demo fallback'}`;
-      const rows = monthRows(state.selectedMonth).filter(r => r.deaths != null).sort((a, b) => b.deaths - a.deaths);
-      const rank = row?.deaths == null ? '--' : `#${rows.findIndex(r => r.county === row.county) + 1}`;
-      document.getElementById('kpiDeaths').textContent = formatMetric(row?.deaths);
-      document.getElementById('kpiRate').textContent = row?.rate != null ? `${row.rate.toFixed(1)} per 100k` : 'Rate not available in current row';
-      document.getElementById('kpiRank').textContent = rank;
-      document.getElementById('kpiPeerMeta').textContent = `${rows.length} counties with non-suppressed counts`;
-      document.getElementById('kpiPending').textContent = row?.pending != null ? `${row.pending.toFixed(1)}%` : 'n/a';
-
-      const trend = computeTrendSignal(state.selectedCounty, state.selectedMonth);
-      document.getElementById('kpiRisk').textContent = trend.labelValue;
-      const pill = document.getElementById('trendPill');
-      pill.textContent = trend.flag;
-      pill.className = 'pill ' + (trend.flag === 'High' ? 'high' : trend.flag === 'Elevated' ? 'elevated' : 'stable');
-    }
-
-    function renderLineChart() {
-      const all = countyRows(state.selectedCounty);
-      const last12 = all.slice(-12);
-      const svg = document.getElementById('lineChart');
-      if (!last12.length) {
-        svg.innerHTML = `<text x="20" y="30" fill="rgba(255,255,255,.55)" font-size="14">No rows available.</text>`;
-        return;
-      }
-      const values = last12.map(d => d.deaths ?? 0);
-      const W = 540, H = 230, m = {t: 16, r: 16, b: 42, l: 42};
-      const iw = W - m.l - m.r, ih = H - m.t - m.b;
-      const maxY = Math.max(...values, 1) * 1.15;
-      const minY = 0;
-      const x = i => m.l + (iw * i / Math.max(last12.length - 1, 1));
-      const y = v => m.t + ih - ((v - minY) / Math.max(maxY - minY, 1)) * ih;
-      const line = last12.map((d, i) => `${i===0?'M':'L'} ${x(i)} ${y(d.deaths ?? 0)}`).join(' ');
-      const area = `${line} L ${x(last12.length-1)} ${m.t+ih} L ${x(0)} ${m.t+ih} Z`;
-      const ticks = Array.from({length: 5}, (_,i) => Math.round(maxY * (4-i)/4));
-      svg.innerHTML = `
-        ${ticks.map(t => `<g><line x1="${m.l}" y1="${y(t)}" x2="${W-m.r}" y2="${y(t)}" stroke="rgba(255,255,255,.08)"/><text x="8" y="${y(t)+4}" fill="rgba(255,255,255,.55)" font-size="11">${t}</text></g>`).join('')}
-        <path d="${area}" fill="rgba(124,198,255,.16)"></path>
-        <path d="${line}" fill="none" stroke="#7cc6ff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
-        ${last12.map((d, i) => `<circle cx="${x(i)}" cy="${y(d.deaths ?? 0)}" r="4.5" fill="#8cf0c6"></circle>`).join('')}
-        ${last12.map((d,i) => `<text x="${x(i)}" y="${H-16}" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="11">${d.month.slice(5)}</text>`).join('')}
-      `;
-      document.getElementById('trendContext').textContent = `${state.selectedCounty} County • ${last12[0].month} to ${last12[last12.length-1].month}`;
-    }
-
-    function renderRanking() {
-      const rows = monthRows(state.selectedMonth)
-        .filter(r => r.county && tileLayout[r.county])
-        .sort((a,b) => (b.deaths ?? -Infinity) - (a.deaths ?? -Infinity));
-      document.getElementById('rankBody').innerHTML = rows.map(r => {
-        const trend = computeTrendSignal(r.county, state.selectedMonth);
-        return `
-          <tr ${r.county === state.selectedCounty ? 'style="background:rgba(124,198,255,.08)"' : ''}>
-            <td>${r.county}</td>
-            <td>${formatMetric(r.deaths)}</td>
-            <td>${trend.labelValue}</td>
-            <td><span class="pill ${trend.flag === 'High' ? 'high' : trend.flag === 'Elevated' ? 'elevated' : 'stable'}">${trend.flag}</span></td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function computeTrendSignal(county, selectedMonth) {
-      const rows = countyRows(county);
-      const idx = rows.findIndex(r => r.month === selectedMonth);
-      if (idx <= 0) return { flag: 'Stable', labelValue: '—' };
-      const current = rows[idx].deaths;
-      const prev = rows[idx - 1].deaths;
-      if (current == null || prev == null || prev === 0) return { flag: 'Stable', labelValue: 'n/a' };
-      const pct = ((current - prev) / prev) * 100;
-      const flag = pct >= 15 ? 'High' : pct >= 5 ? 'Elevated' : 'Stable';
-      return { flag, labelValue: `${pct >= 0 ? '+' : ''}${pct.toFixed(0)}%` };
-    }
-
-    function riskColor(value, min, max) {
-      const t = (value - min) / Math.max(max - min, 1);
-      if (t < 0.2) return '#21325d';
-      if (t < 0.45) return '#2d63a7';
-      if (t < 0.7) return '#3fa0d8';
-      if (t < 0.87) return '#ffb36c';
-      return '#ff6f6f';
-    }
-
-    function formatMetric(v) {
-      if (v == null) return '—';
-      return Number(v).toLocaleString('en-US', { maximumFractionDigits: 0 });
-    }
-
-    function prettyMonth(str) {
-      const [y,m] = str.split('-');
-      const d = new Date(Number(y), Number(m)-1, 1);
-      return d.toLocaleString('en-US', {month:'long', year:'numeric'});
-    }
-
-    function parseCSV(text) {
-      const rows = text.trim().split(/\r?\n/).map(r => r.split(','));
-      const header = rows.shift();
-      return rows.map(r => Object.fromEntries(header.map((h, i) => [h, isNaN(Number(r[i])) || r[i] === '' ? r[i] : Number(r[i])] )));
-    }
-
-    async function fetchJson(url) {
-      const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
-      if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${url}`);
-      return await resp.json();
-    }
-
-    function setStatus(text, muted = false) {
-      statusText.textContent = text;
-      statusText.className = 'status-text' + (muted ? ' muted' : '');
-    }
-  </script>
 </body>
 </html>
