@@ -5,25 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Care Coordination Dashboard</title>
 <style>
-:root{--bg:#f3f6fb;--panel:#fff;--border:#dbe3ef;--text:#172638;--muted:#607389;--blue:#2559d6;--green:#11865b;--amber:#b36b00;--red:#b42318;--chip:#eef3fb;--shadow:0 8px 24px rgba(22,34,51,.08);--radius:18px}
+:root{--panel:#fff;--border:#dbe3ef;--text:#172638;--muted:#607389;--blue:#2559d6;--green:#11865b;--amber:#b36b00;--red:#b42318;--chip:#eef3fb;--shadow:0 8px 24px rgba(22,34,51,.08);--radius:18px}
 *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:linear-gradient(180deg,#f7f9fd 0%,#eef3f9 100%)}
 .wrap{max-width:1480px;margin:0 auto;padding:20px}.topbar{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:18px}
 h1{margin:0 0 6px 0;font-size:40px;line-height:1.05;letter-spacing:-.02em}.subtitle{color:var(--muted);font-size:18px;max-width:900px}
-.top-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.btn{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:12px;padding:11px 14px;font-weight:600;cursor:pointer;box-shadow:var(--shadow)} .btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.top-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.btn{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer;box-shadow:var(--shadow)} .btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
 .grid{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start}.panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)} .sidebar{padding:18px;position:sticky;top:18px}
 .section-title{font-size:13px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}.patient-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
-.patient-card{border:1px solid var(--border);border-radius:14px;padding:14px;cursor:pointer;transition:.15s ease;background:#fbfcfe}.patient-card.active{border-color:#9bb8ff;background:#eef4ff;box-shadow:inset 0 0 0 1px #c6d7ff}
+.patient-card{border:1px solid var(--border);border-radius:14px;padding:14px;cursor:pointer;background:#fbfcfe}.patient-card.active{border-color:#9bb8ff;background:#eef4ff;box-shadow:inset 0 0 0 1px #c6d7ff}
 .patient-name{font-weight:800;font-size:18px;margin-bottom:4px}.meta{color:var(--muted);font-size:14px;line-height:1.4}
 .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.chip{background:var(--chip);color:#334a62;border:1px solid #d8e3f1;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700}
 .risk{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800}.risk.high{background:#fdeceb;color:var(--red)}.risk.medium{background:#fff3e0;color:var(--amber)}.risk.low{background:#e9f8f1;color:var(--green)}
 .main{display:flex;flex-direction:column;gap:18px}.hero{padding:20px 22px}.hero-top{display:flex;gap:14px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px}
-.patient-heading{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}.avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#2c62e6,#6ea1ff);color:#fff;display:grid;place-items:center;font-size:22px;font-weight:800;flex:0 0 auto}
+.patient-heading{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}.avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#2c62e6,#6ea1ff);color:#fff;display:grid;place-items:center;font-size:22px;font-weight:800}
 .hero-name{font-size:30px;font-weight:900;line-height:1.05;margin-bottom:6px}.hero-sub{color:var(--muted);font-size:15px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .stat{border:1px solid var(--border);border-radius:14px;padding:14px;background:#fbfcff}.stat-label{color:var(--muted);font-size:13px;font-weight:700;margin-bottom:6px}.stat-value{font-size:30px;font-weight:900;line-height:1}
 .two-col{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.care-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 18px 0 18px}.panel-h h2{margin:0;font-size:28px;line-height:1.05;letter-spacing:-.02em}.panel-sub{color:var(--muted);font-size:14px;margin:6px 18px 0 18px}
 .body-pad{padding:18px}.care-box{border:1px solid var(--border);background:#fbfcff;border-radius:14px;padding:14px}.care-box h3{margin:0 0 10px 0;font-size:16px}
 ul.clean{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px} ul.clean li{display:flex;gap:10px;align-items:flex-start;line-height:1.35}
-.dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex:0 0 auto;background:#8aa2c5}.dot.green{background:var(--green)}.dot.amber{background:var(--amber)}.dot.red{background:var(--red)}
+.dot{width:10px;height:10px;border-radius:50%;margin-top:5px;background:#8aa2c5}.dot.green{background:var(--green)}.dot.amber{background:var(--amber)}.dot.red{background:var(--red)}
 .owner{color:var(--muted);font-size:12px;font-weight:700;display:block;margin-top:2px}.alert-list{display:flex;flex-direction:column;gap:12px;padding:18px}
 .alert{border-radius:14px;border:1px solid var(--border);padding:14px;background:#fff}.alert.red{background:#fff7f7;border-color:#f0c7c3}.alert.amber{background:#fffaf0;border-color:#efd8aa}.alert.green{background:#f5fcf8;border-color:#cce9d9}.alert-title{font-size:15px;font-weight:800;margin-bottom:4px}.alert-desc{color:#42566d;font-size:14px;line-height:1.4}
 .timeline{padding:18px;display:flex;flex-direction:column;gap:14px}.event{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start}.event-date{color:var(--muted);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding-top:2px}.event-card{border:1px solid var(--border);border-radius:14px;background:#fbfcff;padding:14px}
@@ -33,21 +33,247 @@ ul.clean{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;g
 .task-table{width:100%;border-collapse:collapse;font-size:14px}.task-table th,.task-table td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--border);vertical-align:top}.task-table th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
 .pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:800;background:#eef2f8;color:#42566d}.priority-high{background:#fdeceb;color:var(--red)}.priority-medium{background:#fff4e5;color:var(--amber)}.priority-low{background:#e9f8f1;color:var(--green)}
 .footer-note{color:var(--muted);font-size:12px;margin-top:12px}
+.toast{position:fixed;right:20px;bottom:20px;background:#172638;color:#fff;padding:12px 14px;border-radius:12px;box-shadow:var(--shadow);font-size:14px;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none;z-index:40}.toast.show{opacity:1;transform:translateY(0)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.modal-backdrop.open{display:flex}
+.modal{max-width:880px;width:100%;max-height:85vh;overflow:auto;background:#fff;border-radius:20px;border:1px solid var(--border);box-shadow:0 24px 60px rgba(15,23,42,.24)}
+.modal-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:20px 22px 12px 22px;border-bottom:1px solid var(--border)}.modal-header h3{margin:0;font-size:28px}
+.modal-body{padding:20px 22px}.modal-close{border:1px solid var(--border);background:#fff;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}.snapshot{white-space:pre-wrap;line-height:1.5;font-size:15px}
 @media (max-width:1180px){.grid{grid-template-columns:1fr}.sidebar{position:static}.two-col,.stats,.chart-grid,.care-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<div class="topbar"><div><h1>Shared Care Coordination Dashboard</h1><div class="subtitle">Prototype interface for sharing quality data and comprehensive care plans across community health workers, FQHCs, and hospitals.</div></div><div class="top-actions"><button class="btn">Grant view</button><button class="btn">Export summary</button><button class="btn primary">Patient action snapshot</button></div></div>
-<div class="grid"><div class="panel sidebar"><div class="section-title">Patients in care coordination queue</div><div class="patient-list" id="patientList"></div><div class="section-title">Shared workflow focus</div><div class="care-box"><ul class="clean"><li><span class="dot red"></span><div><strong>Cross-setting visibility</strong><span class="owner">One plan shared by CHW, FQHC, and hospital teams</span></div></li><li><span class="dot amber"></span><div><strong>Care gaps after discharge</strong><span class="owner">Missed follow-up, medication barriers, incomplete outreach</span></div></li><li><span class="dot green"></span><div><strong>Quality signal tracking</strong><span class="owner">Follow-up completed, meds reconciled, activity recovering</span></div></li></ul></div></div>
-<div class="main"><div class="panel hero"><div class="hero-top"><div class="patient-heading"><div class="avatar" id="avatar">MR</div><div><div class="hero-name" id="heroName"></div><div class="hero-sub" id="heroSub"></div><div class="chip-row" id="heroChips"></div></div></div><div id="riskBadge"></div></div><div class="stats" id="stats"></div></div>
-<div class="two-col"><div class="panel"><div class="panel-h"><h2>Shared care plan</h2><span class="pill">3 teams aligned</span></div><div class="panel-sub">Single source of truth for current goals, responsibilities, and barriers.</div><div class="body-pad"><div class="care-grid"><div class="care-box"><h3>Active goals</h3><ul class="clean" id="goals"></ul></div><div class="care-box"><h3>Current barriers</h3><ul class="clean" id="barriers"></ul></div><div class="care-box"><h3>Assigned actions</h3><ul class="clean" id="actions"></ul></div><div class="care-box"><h3>Medication and follow-up</h3><ul class="clean" id="meds"></ul></div></div></div></div><div class="panel"><div class="panel-h"><h2>Alerts and care gaps</h2><span class="pill" id="gapCount"></span></div><div class="panel-sub">Signals that should change what the team does next.</div><div class="alert-list" id="alerts"></div></div></div>
-<div class="two-col"><div class="panel"><div class="panel-h"><h2>Cross-system timeline</h2><span class="pill">Hospital + FQHC + CHW + wearable</span></div><div class="panel-sub">Chronological view of what happened and where it happened.</div><div class="timeline" id="timeline"></div></div><div class="panel"><div class="panel-h"><h2>Wearable trends</h2><span class="pill" id="wearableSummary"></span></div><div class="panel-sub">Daily signals that can support early outreach after discharge.</div><div class="chart-wrap"><div class="chart-grid" id="charts"></div><div class="legend"><span><i class="swatch" style="background:#2559d6"></i>current trajectory</span><span><i class="swatch" style="background:#cfd8e6"></i>target / baseline</span></div></div></div></div>
-<div class="panel"><div class="panel-h"><h2>Who needs to do what next</h2><span class="pill">Actionable care coordination queue</span></div><div class="panel-sub">This is the part that helps the team move from fragmented data to next-step decisions.</div><div class="body-pad"><table class="task-table"><thead><tr><th>Owner</th><th>Task</th><th>Reason</th><th>Due</th><th>Priority</th></tr></thead><tbody id="taskTable"></tbody></table><div class="footer-note">Prototype only. Uses synthetic patient records designed to demonstrate shared care planning across community and hospital settings.</div></div></div></div></div></div>
+<div class="topbar">
+  <div>
+    <h1>Shared Care Coordination Dashboard</h1>
+    <div class="subtitle">Prototype interface for sharing quality data and comprehensive care plans across community health workers, FQHCs, and hospitals.</div>
+  </div>
+  <div class="top-actions">
+    <button class="btn" id="grantBtn">Grant view</button>
+    <button class="btn" id="exportBtn">Export summary</button>
+    <button class="btn primary" id="snapshotBtn">Patient action snapshot</button>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="panel sidebar">
+    <div class="section-title">Patients in care coordination queue</div>
+    <div class="patient-list" id="patientList"></div>
+    <div class="section-title">Shared workflow focus</div>
+    <div class="care-box">
+      <ul class="clean">
+        <li><span class="dot red"></span><div><strong>Cross-setting visibility</strong><span class="owner">One plan shared by CHW, FQHC, and hospital teams</span></div></li>
+        <li><span class="dot amber"></span><div><strong>Care gaps after discharge</strong><span class="owner">Missed follow-up, medication barriers, incomplete outreach</span></div></li>
+        <li><span class="dot green"></span><div><strong>Quality signal tracking</strong><span class="owner">Follow-up completed, meds reconciled, activity recovering</span></div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="panel hero">
+      <div class="hero-top">
+        <div class="patient-heading">
+          <div class="avatar" id="avatar">MR</div>
+          <div>
+            <div class="hero-name" id="heroName"></div>
+            <div class="hero-sub" id="heroSub"></div>
+            <div class="chip-row" id="heroChips"></div>
+          </div>
+        </div>
+        <div id="riskBadge"></div>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-h"><h2>Shared care plan</h2><span class="pill">3 teams aligned</span></div>
+        <div class="panel-sub">Single source of truth for current goals, responsibilities, and barriers.</div>
+        <div class="body-pad">
+          <div class="care-grid">
+            <div class="care-box"><h3>Active goals</h3><ul class="clean" id="goals"></ul></div>
+            <div class="care-box"><h3>Current barriers</h3><ul class="clean" id="barriers"></ul></div>
+            <div class="care-box"><h3>Assigned actions</h3><ul class="clean" id="actions"></ul></div>
+            <div class="care-box"><h3>Medication and follow-up</h3><ul class="clean" id="meds"></ul></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h"><h2>Alerts and care gaps</h2><span class="pill" id="gapCount"></span></div>
+        <div class="panel-sub">Signals that should change what the team does next.</div>
+        <div class="alert-list" id="alerts"></div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-h"><h2>Cross-system timeline</h2><span class="pill">Hospital + FQHC + CHW + wearable</span></div>
+        <div class="panel-sub">Chronological view of what happened and where it happened.</div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h"><h2>Wearable trends</h2><span class="pill" id="wearableSummary"></span></div>
+        <div class="panel-sub">Daily signals that can support early outreach after discharge.</div>
+        <div class="chart-wrap"><div class="chart-grid" id="charts"></div><div class="legend"><span><i class="swatch" style="background:#2559d6"></i>current trajectory</span><span><i class="swatch" style="background:#cfd8e6"></i>target / baseline</span></div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-h"><h2>Who needs to do what next</h2><span class="pill">Actionable care coordination queue</span></div>
+      <div class="panel-sub">This is the part that helps the team move from fragmented data to next-step decisions.</div>
+      <div class="body-pad">
+        <table class="task-table"><thead><tr><th>Owner</th><th>Task</th><th>Reason</th><th>Due</th><th>Priority</th></tr></thead><tbody id="taskTable"></tbody></table>
+        <div class="footer-note">Prototype only. Uses synthetic patient records designed to demonstrate shared care planning across community and hospital settings.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3 id="modalTitle">Title</h3>
+        <div class="subtitle" id="modalSubtitle" style="font-size:15px;max-width:none"></div>
+      </div>
+      <button class="modal-close" id="closeModal">Close</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
 <script>
-const patients=[{initials:"MR",name:"Maria Reyes",age:58,sex:"F",community:"Rural Pinal County",insurance:"AHCCCS",conditions:["Heart failure","Type 2 diabetes","Hypertension"],risk:"high",lastDischarge:"Discharged 4 days ago",stats:[["Risk level","High"],["Open care gaps","4"],["Shared tasks","5"],["Wearable trend","Declining"]],goals:[["Avoid 30-day readmission","Hospital"],["Complete PCP follow-up within 7 days","FQHC"],["Daily weight and symptom check","CHW"],["Improve med adherence after discharge","Shared"]],barriers:[["Transportation barrier for clinic visit","CHW documented"],["Unclear diuretic instructions after discharge","Hospital discharge review"],["Low daily step count since discharge","Wearable feed"],["Missed blood pressure log uploads","Remote monitoring"]],actions:[["Confirm medication reconciliation by phone","FQHC nurse today"],["Home visit for education on weight gain and edema","CHW within 24h"],["Review discharge plan with cardiology office","Hospital care manager"],["Escalate if weight increases >2 lb overnight","Shared protocol"]],meds:[["Furosemide 40 mg daily, refill not yet picked up","Barrier"],["Metformin 1000 mg twice daily","Active"],["Cardiology follow-up scheduled for Apr 4 at 10:00 AM","Upcoming"],["FQHC appointment still needed this week","Open gap"]],alerts:[["red","No completed primary care follow-up after discharge","Patient has not yet seen outpatient team 4 days after discharge."],["amber","Weight up 2.6 lb over 3 days","Could represent early fluid retention after hospitalization."],["amber","Activity down 38% from baseline","Wearable trend suggests poor recovery trajectory."],["green","CHW outreach request already accepted","Community follow-up pathway is active."]],timeline:[["Mar 27","hospital","Hospital discharge","Discharged after CHF exacerbation. Lasix adjusted. Follow-up requested within 7 days."],["Mar 28","wearable","Remote monitoring sync","Step count 2,900. Resting heart rate increased from baseline."],["Mar 29","chw","Community health worker call","Patient reports confusion about medication timing and concern about travel to clinic."],["Mar 30","fqhc","FQHC scheduling attempt","Unable to confirm transportation for clinic visit this week."],["Mar 31","wearable","Weight trend alert","Weight increased from 172.4 lb to 175.0 lb over 72 hours."]],tasks:[["CHW","Home visit with weight and edema check","Recent weight gain and transportation barriers","Today","High"],["FQHC","Complete med reconciliation call","Discharge instructions unclear","Today","High"],["Hospital","Fax updated discharge summary and med list","Need shared plan aligned across settings","Today","Medium"],["FQHC","Schedule PCP follow-up within 48 hours","No post-discharge visit documented","48h","High"],["Shared","Reassess risk after next wearable upload","Declining recovery trend","Tomorrow","Medium"]],wearable:{summary:"HR up, activity down",charts:[["Daily steps","Last 7 days","steps",6500,[6200,5900,5300,4700,4200,3900,3600]],["Resting heart rate","Last 7 days","bpm",71,[71,72,73,74,75,77,78]],["Sleep duration","Last 7 days","hours",7.0,[6.9,6.8,6.7,6.3,6.1,6.2,5.9]],["Daily weight","Last 4 days","lb",172.0,[172.4,173.1,174.2,175.0]]] }},{initials:"JL",name:"James Lee",age:44,sex:"M",community:"South Phoenix",insurance:"Uninsured",conditions:["COPD","Tobacco use disorder"],risk:"medium",lastDischarge:"ED discharge 6 days ago",stats:[["Risk level","Medium"],["Open care gaps","2"],["Shared tasks","3"],["Wearable trend","Stable"]],goals:[["Complete smoking cessation counseling","FQHC"],["Monitor exertional symptoms after ED visit","CHW"],["Confirm inhaler access and teaching","Hospital"]],barriers:[["Cost concern for controller inhaler","Patient reported"],["No established primary care before ED visit","Hospital record"]],actions:[["CHW to review pharmacy assistance options","Within 48h"],["FQHC new patient visit confirmed","This week"],["Hospital ED summary shared with FQHC","Complete"]],meds:[["Albuterol inhaler picked up","Complete"],["Controller inhaler pending affordability support","Open gap"],["FQHC appointment Apr 3 at 2:30 PM","Upcoming"]],alerts:[["amber","Controller inhaler not yet obtained","Cost barrier may limit symptom improvement."],["green","FQHC visit scheduled","First longitudinal follow-up now on calendar."]],timeline:[["Mar 25","hospital","ED discharge","Treated for COPD flare. No hypoxia at discharge."],["Mar 27","chw","Phone outreach","Patient interested in tobacco cessation support."],["Mar 29","fqhc","New patient registration","Visit successfully scheduled."],["Mar 30","wearable","Activity review","Daily steps trending back toward baseline."]],tasks:[["CHW","Review inhaler affordability resources","Medication access barrier remains","48h","High"],["FQHC","Complete new patient intake","Needs continuity after ED discharge","This week","Medium"],["Shared","Document tobacco cessation plan","Quality metric and longitudinal goal","This week","Low"]],wearable:{summary:"Recovering gradually",charts:[["Daily steps","Last 7 days","steps",5200,[2800,3400,3900,4300,4700,5000,5100]],["Resting heart rate","Last 7 days","bpm",76,[82,81,80,79,78,77,77]],["Sleep duration","Last 7 days","hours",6.8,[5.8,6.1,6.3,6.4,6.5,6.7,6.8]],["Pulse oximetry","Last 7 days","%",95,[93,93,94,94,95,95,95]]] }},{initials:"AK",name:"Aaliyah Khan",age:29,sex:"F",community:"Rural Maricopa fringe",insurance:"Medicaid",conditions:["Postpartum hypertension"],risk:"medium",lastDischarge:"Postpartum discharge 8 days ago",stats:[["Risk level","Medium"],["Open care gaps","1"],["Shared tasks","2"],["Wearable trend","Needs BP review"]],goals:[["Maintain home BP monitoring","Shared"],["Prevent postpartum readmission","Hospital"],["Ensure transportation for next OB visit","CHW"]],barriers:[["Intermittent cuff syncing issue","Remote monitoring"]],actions:[["CHW to check device setup in person","Within 72h"],["Hospital nurse to review BP log threshold","Today"]],meds:[["Nifedipine ER 30 mg daily","Active"],["OB follow-up completed","Complete"],["Next BP review scheduled in 3 days","Upcoming"]],alerts:[["amber","Two elevated home BP readings","Needs clinician review but patient otherwise stable."],["green","OB follow-up completed on time","Transition to outpatient care successful."]],timeline:[["Mar 23","hospital","Postpartum discharge","Home BP monitoring plan started."],["Mar 26","wearable","BP device upload","Two readings above threshold overnight."],["Mar 29","fqhc","Primary care review","General recovery going well."],["Mar 31","chw","Text outreach","Patient requested help reconnecting cuff app."]],tasks:[["Hospital","Review uploaded BP values","Two elevated readings logged","Today","High"],["CHW","Troubleshoot home device sync","Missing seamless home monitoring","72h","Medium"]],wearable:{summary:"BP needs review",charts:[["Systolic BP","Last 7 days","mmHg",132,[136,134,138,142,144,138,137]],["Sleep duration","Last 7 days","hours",6.5,[5.6,5.9,5.3,5.8,5.7,6.0,5.8]],["Daily steps","Last 7 days","steps",4200,[2500,2900,3100,3300,3600,3800,4100]],["Resting heart rate","Last 7 days","bpm",74,[78,77,77,76,76,75,75]]] }}];
-let current=0;const riskBadge=l=>`<span class="risk ${l}">${l.toUpperCase()} RISK</span>`;const listHtml=(arr,d='')=>arr.map(i=>`<li><span class="dot ${d}"></span><div><strong>${i[0]}</strong><span class="owner">${i[1]}</span></div></li>`).join('');const alertHtml=arr=>arr.map(a=>`<div class="alert ${a[0]}"><div class="alert-title">${a[1]}</div><div class="alert-desc">${a[2]}</div></div>`).join('');const timelineHtml=arr=>arr.map(e=>`<div class="event"><div class="event-date">${e[0]}</div><div class="event-card"><span class="source ${e[1]}">${e[1].toUpperCase()}</span><div class="event-title">${e[2]}</div><div class="event-desc">${e[3]}</div></div></div>`).join('');const taskHtml=arr=>arr.map(t=>`<tr><td><strong>${t[0]}</strong></td><td>${t[1]}</td><td>${t[2]}</td><td>${t[3]}</td><td><span class="pill priority-${t[4].toLowerCase()}">${t[4]}</span></td></tr>`).join('');function lineChartSVG(values,baseline,color){const w=360,h=160,pad=18,min=Math.min(...values,baseline),max=Math.max(...values,baseline),range=(max-min)||1,x=i=>pad+(i*((w-pad*2)/((values.length-1)||1))),y=v=>h-pad-((v-min)/range)*(h-pad*2),line=values.map((v,i)=>`${i===0?'M':'L'} ${x(i)} ${y(v)}`).join(' '),baseY=y(baseline),area=`M ${x(0)} ${h-pad} `+values.map((v,i)=>`L ${x(i)} ${y(v)}`).join(' ')+` L ${x(values.length-1)} ${h-pad} Z`,points=values.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="${color}" />`).join(''),labels=values.map((_,i)=>`<text x="${x(i)}" y="${h-3}" text-anchor="middle" font-size="10" fill="#72849a">D${i+1}</text>`).join('');return `<svg viewBox="0 0 ${w} ${h}"><line x1="${pad}" y1="${baseY}" x2="${w-pad}" y2="${baseY}" stroke="#cfd8e6" stroke-width="2" stroke-dasharray="5 5"></line><path d="${area}" fill="${color}" opacity="0.10"></path><path d="${line}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>${points}${labels}</svg>`}
-function chartsHtml(w){const colors=["#2559d6","#11865b","#6941c6","#b36b00"];return w.charts.map((c,i)=>`<div class="mini-chart"><h3>${c[0]}</h3><div class="chart-meta">${c[1]} · baseline ${c[3]} ${c[2]}</div>${lineChartSVG(c[4],c[3],colors[i%colors.length])}</div>`).join('')} function patientCards(){const wrap=document.getElementById('patientList');wrap.innerHTML=patients.map((p,i)=>`<div class="patient-card ${i===current?'active':''}" data-index="${i}"><div class="patient-name">${p.name}</div><div class="meta">${p.age} y/o ${p.sex} · ${p.community}</div><div class="meta">${p.lastDischarge}</div><div class="chip-row"><span class="risk ${p.risk}">${p.risk.toUpperCase()}</span><span class="chip">${p.conditions[0]}</span></div></div>`).join('');wrap.querySelectorAll('.patient-card').forEach(el=>el.onclick=()=>{current=+el.dataset.index;render()})} function render(){const p=patients[current];patientCards();document.getElementById('avatar').textContent=p.initials;document.getElementById('heroName').textContent=p.name;document.getElementById('heroSub').textContent=`${p.age} y/o ${p.sex} · ${p.community} · ${p.insurance} · ${p.lastDischarge}`;document.getElementById('heroChips').innerHTML=p.conditions.map(c=>`<span class="chip">${c}</span>`).join('');document.getElementById('riskBadge').innerHTML=riskBadge(p.risk);document.getElementById('stats').innerHTML=p.stats.map(s=>`<div class="stat"><div class="stat-label">${s[0]}</div><div class="stat-value">${s[1]}</div></div>`).join('');document.getElementById('goals').innerHTML=listHtml(p.goals,'green');document.getElementById('barriers').innerHTML=listHtml(p.barriers,'amber');document.getElementById('actions').innerHTML=listHtml(p.actions,'red');document.getElementById('meds').innerHTML=listHtml(p.meds);document.getElementById('alerts').innerHTML=alertHtml(p.alerts);document.getElementById('gapCount').textContent=`${p.alerts.filter(a=>a[0]!=='green').length} priority signals`;document.getElementById('timeline').innerHTML=timelineHtml(p.timeline);document.getElementById('taskTable').innerHTML=taskHtml(p.tasks);document.getElementById('wearableSummary').textContent=p.wearable.summary;document.getElementById('charts').innerHTML=chartsHtml(p.wearable)} render();
+const patients=[{initials:"MR",name:"Maria Reyes",age:58,sex:"F",community:"Rural Pinal County",insurance:"AHCCCS",conditions:["Heart failure","Type 2 diabetes","Hypertension"],risk:"high",lastDischarge:"Discharged 4 days ago",stats:[["Risk level","High"],["Open care gaps","4"],["Shared tasks","5"],["Wearable trend","Declining"]],goals:[["Avoid 30-day readmission","Hospital"],["Complete PCP follow-up within 7 days","FQHC"],["Daily weight and symptom check","CHW"],["Improve med adherence after discharge","Shared"]],barriers:[["Transportation barrier for clinic visit","CHW documented"],["Unclear diuretic instructions after discharge","Hospital discharge review"],["Low daily step count since discharge","Wearable feed"],["Missed blood pressure log uploads","Remote monitoring"]],actions:[["Confirm medication reconciliation by phone","FQHC nurse today"],["Home visit for education on weight gain and edema","CHW within 24h"],["Review discharge plan with cardiology office","Hospital care manager"],["Escalate if weight increases >2 lb overnight","Shared protocol"]],meds:[["Furosemide 40 mg daily, refill not yet picked up","Barrier"],["Metformin 1000 mg twice daily","Active"],["Cardiology follow-up scheduled for Apr 4 at 10:00 AM","Upcoming"],["FQHC appointment still needed this week","Open gap"]],alerts:[["red","No completed primary care follow-up after discharge","Patient has not yet seen outpatient team 4 days after discharge."],["amber","Weight up 2.6 lb over 3 days","Could represent early fluid retention after hospitalization."],["amber","Activity down 38% from baseline","Wearable trend suggests poor recovery trajectory."],["green","CHW outreach request already accepted","Community follow-up pathway is active."]],timeline:[["Mar 27","hospital","Hospital discharge","Discharged after CHF exacerbation. Lasix adjusted. Follow-up requested within 7 days."],["Mar 28","wearable","Remote monitoring sync","Step count 2,900. Resting heart rate increased from baseline."],["Mar 29","chw","Community health worker call","Patient reports confusion about medication timing and concern about travel to clinic."],["Mar 30","fqhc","FQHC scheduling attempt","Unable to confirm transportation for clinic visit this week."],["Mar 31","wearable","Weight trend alert","Weight increased from 172.4 lb to 175.0 lb over 72 hours."]],tasks:[["CHW","Home visit with weight and edema check","Recent weight gain and transportation barriers","Today","High"],["FQHC","Complete med reconciliation call","Discharge instructions unclear","Today","High"],["Hospital","Fax updated discharge summary and med list","Need shared plan aligned across settings","Today","Medium"],["FQHC","Schedule PCP follow-up within 48 hours","No post-discharge visit documented","48h","High"],["Shared","Reassess risk after next wearable upload","Declining recovery trend","Tomorrow","Medium"]],wearable:{summary:"HR up, activity down",charts:[["Daily steps","Last 7 days","steps",6500,[6200,5900,5300,4700,4200,3900,3600]],["Resting heart rate","Last 7 days","bpm",71,[71,72,73,74,75,77,78]],["Sleep duration","Last 7 days","hours",7.0,[6.9,6.8,6.7,6.3,6.1,6.2,5.9]],["Daily weight","Last 4 days","lb",172.0,[172.4,173.1,174.2,175.0]]]}}
+,{initials:"JL",name:"James Lee",age:44,sex:"M",community:"South Phoenix",insurance:"Uninsured",conditions:["COPD","Tobacco use disorder"],risk:"medium",lastDischarge:"ED discharge 6 days ago",stats:[["Risk level","Medium"],["Open care gaps","2"],["Shared tasks","3"],["Wearable trend","Stable"]],goals:[["Complete smoking cessation counseling","FQHC"],["Monitor exertional symptoms after ED visit","CHW"],["Confirm inhaler access and teaching","Hospital"]],barriers:[["Cost concern for controller inhaler","Patient reported"],["No established primary care before ED visit","Hospital record"]],actions:[["CHW to review pharmacy assistance options","Within 48h"],["FQHC new patient visit confirmed","This week"],["Hospital ED summary shared with FQHC","Complete"]],meds:[["Albuterol inhaler picked up","Complete"],["Controller inhaler pending affordability support","Open gap"],["FQHC appointment Apr 3 at 2:30 PM","Upcoming"]],alerts:[["amber","Controller inhaler not yet obtained","Cost barrier may limit symptom improvement."],["green","FQHC visit scheduled","First longitudinal follow-up now on calendar."]],timeline:[["Mar 25","hospital","ED discharge","Treated for COPD flare. No hypoxia at discharge."],["Mar 27","chw","Phone outreach","Patient interested in tobacco cessation support."],["Mar 29","fqhc","New patient registration","Visit successfully scheduled."],["Mar 30","wearable","Activity review","Daily steps trending back toward baseline."]],tasks:[["CHW","Review inhaler affordability resources","Medication access barrier remains","48h","High"],["FQHC","Complete new patient intake","Needs continuity after ED discharge","This week","Medium"],["Shared","Document tobacco cessation plan","Quality metric and longitudinal goal","This week","Low"]],wearable:{summary:"Recovering gradually",charts:[["Daily steps","Last 7 days","steps",5200,[2800,3400,3900,4300,4700,5000,5100]],["Resting heart rate","Last 7 days","bpm",76,[82,81,80,79,78,77,77]],["Sleep duration","Last 7 days","hours",6.8,[5.8,6.1,6.3,6.4,6.5,6.7,6.8]],["Pulse oximetry","Last 7 days","%",95,[93,93,94,94,95,95,95]]]}}
+,{initials:"AK",name:"Aaliyah Khan",age:29,sex:"F",community:"Rural Maricopa fringe",insurance:"Medicaid",conditions:["Postpartum hypertension"],risk:"medium",lastDischarge:"Postpartum discharge 8 days ago",stats:[["Risk level","Medium"],["Open care gaps","1"],["Shared tasks","2"],["Wearable trend","Needs BP review"]],goals:[["Maintain home BP monitoring","Shared"],["Prevent postpartum readmission","Hospital"],["Ensure transportation for next OB visit","CHW"]],barriers:[["Intermittent cuff syncing issue","Remote monitoring"]],actions:[["CHW to check device setup in person","Within 72h"],["Hospital nurse to review BP log threshold","Today"]],meds:[["Nifedipine ER 30 mg daily","Active"],["OB follow-up completed","Complete"],["Next BP review scheduled in 3 days","Upcoming"]],alerts:[["amber","Two elevated home BP readings","Needs clinician review but patient otherwise stable."],["green","OB follow-up completed on time","Transition to outpatient care successful."]],timeline:[["Mar 23","hospital","Postpartum discharge","Home BP monitoring plan started."],["Mar 26","wearable","BP device upload","Two readings above threshold overnight."],["Mar 29","fqhc","Primary care review","General recovery going well."],["Mar 31","chw","Text outreach","Patient requested help reconnecting cuff app."]],tasks:[["Hospital","Review uploaded BP values","Two elevated readings logged","Today","High"],["CHW","Troubleshoot home device sync","Missing seamless home monitoring","72h","Medium"]],wearable:{summary:"BP needs review",charts:[["Systolic BP","Last 7 days","mmHg",132,[136,134,138,142,144,138,137]],["Sleep duration","Last 7 days","hours",6.5,[5.6,5.9,5.3,5.8,5.7,6.0,5.8]],["Daily steps","Last 7 days","steps",4200,[2500,2900,3100,3300,3600,3800,4100]],["Resting heart rate","Last 7 days","bpm",74,[78,77,77,76,76,75,75]]]}}];
+
+let current=0;
+const riskBadge=l=>`<span class="risk ${l}">${l.toUpperCase()} RISK</span>`;
+const listHtml=(arr,d='')=>arr.map(i=>`<li><span class="dot ${d}"></span><div><strong>${i[0]}</strong><span class="owner">${i[1]}</span></div></li>`).join('');
+const alertHtml=arr=>arr.map(a=>`<div class="alert ${a[0]}"><div class="alert-title">${a[1]}</div><div class="alert-desc">${a[2]}</div></div>`).join('');
+const timelineHtml=arr=>arr.map(e=>`<div class="event"><div class="event-date">${e[0]}</div><div class="event-card"><span class="source ${e[1]}">${e[1].toUpperCase()}</span><div class="event-title">${e[2]}</div><div class="event-desc">${e[3]}</div></div></div>`).join('');
+const taskHtml=arr=>arr.map(t=>`<tr><td><strong>${t[0]}</strong></td><td>${t[1]}</td><td>${t[2]}</td><td>${t[3]}</td><td><span class="pill priority-${t[4].toLowerCase()}">${t[4]}</span></td></tr>`).join('');
+
+function lineChartSVG(values,baseline,color){
+  const w=360,h=160,pad=18,min=Math.min(...values,baseline),max=Math.max(...values,baseline),range=(max-min)||1;
+  const x=i=>pad+(i*((w-pad*2)/((values.length-1)||1)));
+  const y=v=>h-pad-((v-min)/range)*(h-pad*2);
+  const line=values.map((v,i)=>`${i===0?'M':'L'} ${x(i)} ${y(v)}`).join(' ');
+  const baseY=y(baseline);
+  const area=`M ${x(0)} ${h-pad} `+values.map((v,i)=>`L ${x(i)} ${y(v)}`).join(' ')+` L ${x(values.length-1)} ${h-pad} Z`;
+  const points=values.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="${color}" />`).join('');
+  const labels=values.map((_,i)=>`<text x="${x(i)}" y="${h-3}" text-anchor="middle" font-size="10" fill="#72849a">D${i+1}</text>`).join('');
+  return `<svg viewBox="0 0 ${w} ${h}"><line x1="${pad}" y1="${baseY}" x2="${w-pad}" y2="${baseY}" stroke="#cfd8e6" stroke-width="2" stroke-dasharray="5 5"></line><path d="${area}" fill="${color}" opacity="0.10"></path><path d="${line}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>${points}${labels}</svg>`;
+}
+function chartsHtml(w){
+  const colors=["#2559d6","#11865b","#6941c6","#b36b00"];
+  return w.charts.map((c,i)=>`<div class="mini-chart"><h3>${c[0]}</h3><div class="chart-meta">${c[1]} · baseline ${c[3]} ${c[2]}</div>${lineChartSVG(c[4],c[3],colors[i%colors.length])}</div>`).join('');
+}
+function patientCards(){
+  const wrap=document.getElementById('patientList');
+  wrap.innerHTML=patients.map((p,i)=>`<div class="patient-card ${i===current?'active':''}" data-index="${i}"><div class="patient-name">${p.name}</div><div class="meta">${p.age} y/o ${p.sex} · ${p.community}</div><div class="meta">${p.lastDischarge}</div><div class="chip-row"><span class="risk ${p.risk}">${p.risk.toUpperCase()}</span><span class="chip">${p.conditions[0]}</span></div></div>`).join('');
+  wrap.querySelectorAll('.patient-card').forEach(el=>el.onclick=()=>{current=+el.dataset.index;render();});
+}
+function render(){
+  const p=patients[current];
+  patientCards();
+  document.getElementById('avatar').textContent=p.initials;
+  document.getElementById('heroName').textContent=p.name;
+  document.getElementById('heroSub').textContent=`${p.age} y/o ${p.sex} · ${p.community} · ${p.insurance} · ${p.lastDischarge}`;
+  document.getElementById('heroChips').innerHTML=p.conditions.map(c=>`<span class="chip">${c}</span>`).join('');
+  document.getElementById('riskBadge').innerHTML=riskBadge(p.risk);
+  document.getElementById('stats').innerHTML=p.stats.map(s=>`<div class="stat"><div class="stat-label">${s[0]}</div><div class="stat-value">${s[1]}</div></div>`).join('');
+  document.getElementById('goals').innerHTML=listHtml(p.goals,'green');
+  document.getElementById('barriers').innerHTML=listHtml(p.barriers,'amber');
+  document.getElementById('actions').innerHTML=listHtml(p.actions,'red');
+  document.getElementById('meds').innerHTML=listHtml(p.meds);
+  document.getElementById('alerts').innerHTML=alertHtml(p.alerts);
+  document.getElementById('gapCount').textContent=`${p.alerts.filter(a=>a[0]!=='green').length} priority signals`;
+  document.getElementById('timeline').innerHTML=timelineHtml(p.timeline);
+  document.getElementById('taskTable').innerHTML=taskHtml(p.tasks);
+  document.getElementById('wearableSummary').textContent=p.wearable.summary;
+  document.getElementById('charts').innerHTML=chartsHtml(p.wearable);
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(window.toastTimer);
+  window.toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+function openModal(title,subtitle,bodyHtml){
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalSubtitle').textContent=subtitle || '';
+  document.getElementById('modalBody').innerHTML=bodyHtml;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+function snapshotText(p){
+  return `${p.name}
+Risk: ${p.risk.toUpperCase()}
+Community: ${p.community}
+Insurance: ${p.insurance}
+Conditions: ${p.conditions.join(', ')}
+
+Top priorities:
+${p.tasks.map((t,i)=>`${i+1}. ${t[0]}: ${t[1]} (${t[3]}, ${t[4]} priority)`).join('\n')}
+
+Active gaps:
+${p.alerts.filter(a=>a[0]!=='green').map((a,i)=>`${i+1}. ${a[1]} - ${a[2]}`).join('\n')}
+`;
+}
+function downloadFile(filename,text,type='text/plain'){
+  const blob=new Blob([text],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),500);
+}
+function bindButtons(){
+  document.getElementById('grantBtn').onclick=()=>{
+    openModal('Grant view','Prototype framing for Rural Health Transformation grant discussion',`
+      <div class="snapshot"><strong>Core use case</strong>
+Shared care coordination across CHW, FQHC, and hospital settings with one longitudinal care plan.
+
+<strong>What this interface demonstrates</strong>
+• shared patient-level visibility after discharge
+• clear assignment of next-step responsibilities
+• quality and care-gap monitoring across settings
+• wearable or remote monitoring signals that support early outreach
+
+<strong>Primary users</strong>
+• community health workers
+• FQHC care teams
+• hospital transitional care teams
+
+<strong>Decisions supported</strong>
+• who needs outreach today
+• whether follow-up actually happened
+• what barriers are blocking care
+• where recovery data suggests rising risk</div>`);
+  };
+  document.getElementById('snapshotBtn').onclick=()=>{
+    const p=patients[current];
+    const text=snapshotText(p);
+    openModal('Patient action snapshot',`${p.name} · concise coordination summary`,`<div class="snapshot">${text.replace(/\n/g,'<br>')}</div>`);
+  };
+  document.getElementById('exportBtn').onclick=()=>{
+    const p=patients[current];
+    downloadFile(`${p.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}-summary.txt`, snapshotText(p));
+    showToast('Summary exported');
+  };
+  document.getElementById('closeModal').onclick=closeModal;
+  document.getElementById('modal').onclick=(e)=>{ if(e.target.id==='modal') closeModal(); };
+  document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeModal(); });
+}
+render();
+bindButtons();
 </script>
 </body>
 </html>
